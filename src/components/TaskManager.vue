@@ -1,36 +1,44 @@
 ﻿<template>
   <div>
-    <!-- Via multiple directive modifiers -->
-    <b-button v-b-toggle.collapse-a.collapse-b>Новые задачи</b-button>
-
-    <!-- Via space separated string of IDs passed to directive value -->
-    <b-button v-b-toggle="'collapse-a collapse-b'">В работе</b-button>
-
-    <!-- Via array of string IDs passed to directive value -->
-    <b-button v-b-toggle="['collapse-a', 'collapse-b']">Выполненные</b-button>
-
-    <!-- Elements to collapse -->
-    <b-collapse id="collapse-a" class="mt-2">
-      <b-card>I am collapsible content A!</b-card>
-    </b-collapse>
-    <b-collapse id="collapse-b" class="mt-2">
-      <b-card>I am collapsible content B!</b-card>
-    </b-collapse>
+    <form @submit.prevent="tryAddTask">
+      <div>
+        <label for="title">Заголовок:</label>
+        <input type="text" v-model="model.title" id="title" required />
+      </div>
+      <div>
+        <label for="description">Описание:</label>
+        <textarea v-model="model.description" id="description" required></textarea>
+      </div>
+      <div>
+        <label for="deadline">Дедлайн:</label>
+        <input type="date" v-model="model.deadline" id="deadline" required />
+      </div>
+      <div>
+        <label for="taskStatus">Статус задачи:</label>
+        <input type="text" v-model="model.taskStatus" id="taskStatus" required />
+      </div>
+      <div>
+        <label for="assignedUser">Исполнитель:</label>
+        <input type="text" v-model="model.assignedUser.username" id="assignedUser" required />
+      </div>
+      <button type="submit">Добавить задачу</button>
+    </form>
   </div>
 </template>
 
 <script>
-import {ApiAddress} from "@/common";
+import axios from 'axios';
+import { ApiAddress } from "@/common.ts";
 
 export default {
   name: 'task-manager',
-  data(){
-    return{
+  data() {
+    return {
       model: {
         taskId: 0,
         title: '',
         description: '',
-        deadline: Date,
+        deadline: '',
         taskStatus: '',
         assignedUser: {
           id: 0,
@@ -39,18 +47,23 @@ export default {
         }
       }
     }
-  }
+  },
   methods: {
-    async tryAddTask(){
+    async tryAddTask() {
       try {
-        const response = await axios.post(`${ApiAddress}/task`, this.model)
+        const response = await axios.post(`${ApiAddress}/task-manager`, this.model);
+        if (response.status === 200) {
+          localStorage.setItem("taskId", response.data.taskId);
+          this.$router.push('/task-manager');
+        }
+      } catch (error) {
+        console.log(error);
       }
     }
   }
 }
 </script>
 
-
 <style scoped>
-
+/* ваши стили */
 </style>
