@@ -7,7 +7,6 @@
         <b-nav-item :to="{ path: '/task-manager' }">Task Manager</b-nav-item>
       </b-nav>
     </div>
-
     <!-- CARD -->
     <div class="d-flex justify-content-center mt-5">
       <b-card
@@ -30,7 +29,9 @@
         </b-button>
       </b-card>
     </div>
+    
   </div>
+  
 </template>
 
 <script>
