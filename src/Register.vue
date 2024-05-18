@@ -61,15 +61,19 @@ export default {
   },
   methods: {
     onSubmit() {
-      axios.post(`${ApiAddress}/register`, this.model)
+      axios.post(`${ApiAddress}Account/RegisterModel`, {
+        email: this.model.email,
+        password: this.model.password,
+        confirmPassword: this.model.confirmPassword
+      })
           .then(response => {
             localStorage.removeItem("accessToken");
             window.location = `${window.location.protocol}//${window.location.hostname}/#/login`;
-            this.$notify({ type: "success", icon: "mdi mdi-check-bold", verticalAlign: 'top', horizontalAlign: 'right', message: 'Вы успешно зарегистрировались' });
+            this.$toast.add({severity:'success', summary: 'Успех', detail: 'Вы успешно зарегистрировались', life: 3000});
             console.log(response.data);
           })
           .catch(error => {
-            this.$notify({ type: "danger", icon: "mdi mdi-remove", verticalAlign: 'top', horizontalAlign: 'right', message: 'Не удалось создать аккаунт' });
+            this.$toast.add({severity:'error', summary: 'Ошибка', detail: 'Не удалось создать аккаунт', life: 3000});
             console.log(error);
           });
     }
