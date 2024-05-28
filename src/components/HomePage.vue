@@ -1,10 +1,12 @@
 ﻿<template>
-  <div>
+  <div class="home-page vh-100">
     <!-- HEADER -->
     <div>
       <b-nav>
         <b-nav-item disabled>Shelehov</b-nav-item>
         <b-nav-item :to="{ path: '/task-manager' }">Task Manager</b-nav-item>
+        <b-nav-item :to="{ path: '/async-Metod-Email' }">async Metod Email</b-nav-item>
+        <b-nav-item :to="{ path: '/async-Metod-Files' }">async Metods Files</b-nav-item>
       </b-nav>
     </div>
     <!-- CARD -->
@@ -19,8 +21,7 @@
           class="mb-2"
       >
         <b-card-text>
-          В шапке можно найти реализацию всех заданий данных на занятиях.
-          Код размещен на GitHub, проект постоянно улучшается, заходи регулярно :)
+          USER: {{ currentUser }}
         </b-card-text>
 
         <b-button href="https://github.com/sergey2k161/SecondAssignment" variant="dark" class="github-button">
@@ -29,18 +30,43 @@
         </b-button>
       </b-card>
     </div>
-    
+
   </div>
-  
+
 </template>
 
 <script>
+import axios from "axios";
+import {ApiAddress} from "@/common.ts";
 export default {
-  name: 'HomePage'
+  name: 'HomePage',
+  data() {
+    return {
+      currentUser: ''
+    }
+  },
+  mounted() {
+    this.getCurrentUser();
+  },
+  methods: {
+    async getCurrentUser() {
+      try {
+        const response = await axios.get(ApiAddress + "Account/CurrentUser", { withCredentials: true });
+        this.currentUser = response.data;
+      } catch (error) {
+        console.error("Error fetching current user:", error);
+      }
+    }
+
+  }
+
 }
 </script>
 
 <style scoped>
+.home-page{
+  background-color: #355957;
+}
 .github-button {
   display: inline-flex;
   align-items: center;

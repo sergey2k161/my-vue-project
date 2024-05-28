@@ -83,7 +83,7 @@ export default {
   methods: {
     async fetchUsers() {
       try {
-        const response = await axios.get(`${ApiAddress}/users`);
+        const response = await axios.get(ApiAddress + `users`);
         this.userOptions = response.data.map(user => ({
           value: user.id,
           text: user.username
@@ -136,5 +136,5 @@ export default {
 </script>
 
 <style scoped>
-/* ваши стили */
+
 </style>
